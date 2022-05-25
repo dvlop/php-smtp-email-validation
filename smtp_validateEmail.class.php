@@ -267,6 +267,41 @@ class SMTP_validateEmail {
    echo '<pre>'.htmlentities($str).'</pre>';
   }
  }
+	
+ public function full_info()
+ {
+       return $this->info;
+ }
+	
+    public function output(){
+        $output_arr=array();
+        $icon_arr=array();
+        $res_arr= array();
+        array_push($output_arr,'The Email Address Syntax is correct');
+        array_push($icon_arr,1);
+        if (isset($this->info['host0']) && ($this->info['host0']!='')){ 
+            array_push($output_arr, 'Connecting to '.$this->info['host0'].'worked');
+            array_push($icon_arr,1);
+            for ($i=1;$i<$this->host_count;$i++)
+            {
+                array_push($output_arr, 'Connecting to '.$this->info['host'.$i].'failed');
+                array_push($icon_arr,0);
+            }
+        }
+        if ((strpos($this->result, 'not valid')) || (strpos($this->result, 'found')) ){
+            array_push($icon_arr,0);
+        }
+        else {
+             array_push($icon_arr,1);
+        }
+        array_push($output_arr, $this->result);
+        for ($n = 0; $n < count($output_arr); $n++) {
+               $res_arr[$output_arr[$n]] = $icon_arr[$n];
+           }
+            
+        
+        return $res_arr;
+    }
 
 }
 
